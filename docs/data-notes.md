@@ -32,3 +32,13 @@ Exclude these from marts. The LLM only sees mart tables.
 - Distinct values of orders.status, order_items.status, events.event_type, users.traffic_source
 - Does orders.num_of_item equal the count of order_items per order?
 - Do cancelled orders still have order_items rows?
+
+
+## Decisions (Day 1)
+- Revenue is computed from order_items.sale_price; net revenue excludes status Cancelled and Returned.
+- Statuses (both tables): Shipped, Complete, Processing, Cancelled, Returned.
+- Traffic sources: Search, Organic, Facebook, Email, Display. Organic has no ad spend.
+- events `cancel` rows do not match cancelled orders; use order status instead.
+- events `purchase` count equals order_items count (181,719).
+- Ad-spend window: 2024-01-01 to present; channel names match users.traffic_source.
+- Benchmark questions use fixed date ranges because source data grows daily.
