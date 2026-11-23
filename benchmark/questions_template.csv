@@ -1,0 +1,4 @@
+id,question,golden_sql,metric_used,difficulty,failure_tag
+1,What was total revenue last month?,,revenue,easy,
+2,Which channel had the highest ROAS last quarter?,,roas,medium,
+3,Why did revenue dip last week? (compare by channel and category),,revenue,hard,
