@@ -1,0 +1,9 @@
+google-cloud-bigquery
+pandas
+sqlglot
+streamlit
+python-dotenv
+pytest
+dbt-bigquery
+# Add your LLM client here (e.g. google-genai) once you pick a model
+# Airflow runs in Docker (see dags/README.md), so it is not pinned here
