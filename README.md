@@ -8,7 +8,6 @@ An Airflow-orchestrated BigQuery warehouse combining sales, ad spend and product
 
 ## Architecture
 Sources (thelook_ecommerce, GA4 sample, generated ad spend) -> Airflow DAGs (incremental loads) -> BigQuery raw -> dbt (staging -> marts -> metrics) -> LLM text-to-SQL (metric context, sqlglot validation, dry-run cost guard) -> Streamlit chat (answer + SQL + chart).
-*(Replace with a diagram image in Week 5.)*
 
 ## Results (fill ONLY with measured numbers)
 | Metric | Value |
@@ -26,5 +25,3 @@ Sources (thelook_ecommerce, GA4 sample, generated ad spend) -> Airflow DAGs (inc
 ## Design decisions
 See docs/decisions/.
 
-## At 100x scale
-What breaks first and what I would change: *(write in Week 5)*.
