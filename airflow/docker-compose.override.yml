@@ -1,0 +1,21 @@
+x-lean: &lean
+  environment:
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    PYTHONPATH: /opt/airflow/ingest
+    GCP_PROJECT_ID: ${GCP_PROJECT_ID}
+    LOADER_KEY_PATH: /opt/airflow/keys/loader.json
+  volumes:
+    - ../dags:/opt/airflow/dags
+    - ../ingest:/opt/airflow/ingest:ro
+    - ../service-account-loader.json:/opt/airflow/keys/loader.json:ro
+
+services:
+  airflow-init: *lean
+  airflow-apiserver: *lean
+  airflow-dag-processor: *lean
+  airflow-scheduler: *lean
+  airflow-worker:
+    profiles: ["celery"]
+  airflow-triggerer:
+    profiles: ["celery"]

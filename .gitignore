@@ -8,3 +8,8 @@ dbt_packages/
 logs/
 .DS_Store
 service-account*.json
+airflow/.env
+airflow/logs/
+airflow/config/
+airflow/plugins/
+__pycache__/
