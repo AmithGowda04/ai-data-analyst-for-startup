@@ -26,8 +26,9 @@ USER_PII = "first_name, last_name, email, street_address, latitude, longitude, u
 FULL_REFRESH = {
     "orders": f"SELECT * FROM `{SRC}.orders` "
               "WHERE DATE(created_at) >= @lo AND DATE(created_at) < @hi",
-    "order_items": f"SELECT * FROM `{SRC}.order_items` "
-                   "WHERE DATE(created_at) >= @lo AND DATE(created_at) < @hi",
+    "order_items": f"SELECT oi.* FROM `{SRC}.order_items` oi "
+                   f"WHERE oi.order_id IN (SELECT order_id FROM `{SRC}.orders` "
+                   "WHERE DATE(created_at) >= @lo AND DATE(created_at) < @hi)",
     "users": f"SELECT * EXCEPT ({USER_PII}) FROM `{SRC}.users`",
     "products": f"SELECT * FROM `{SRC}.products`",
 }

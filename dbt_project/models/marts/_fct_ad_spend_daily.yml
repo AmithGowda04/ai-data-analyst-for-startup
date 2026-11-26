@@ -1,0 +1,29 @@
+version: 2
+
+models:
+  - name: fct_ad_spend_daily
+    description: "One row per day and paid channel (grain - date and channel). Covers paid channels only (Search, Facebook, Display, Email); Organic has no ad spend. Ad spend is synthetic data."
+    columns:
+      - name: spend_key
+        description: "Unique key combining date and channel."
+        data_tests: [unique, not_null]
+      - name: spend_date
+        description: "UTC date of the spend."
+      - name: channel
+        description: "Paid marketing channel."
+        data_tests:
+          - accepted_values:
+              values: ['Search', 'Facebook', 'Display', 'Email']
+      - name: spend
+        description: "Ad spend in USD for the day and channel."
+        data_tests: [non_negative]
+      - name: impressions
+        description: "Ad impressions."
+      - name: clicks
+        description: "Ad clicks."
+      - name: net_orders
+        description: "Net orders placed that day by customers acquired through this channel."
+      - name: net_revenue
+        description: "Net revenue in USD that day from customers acquired through this channel."
+      - name: new_customers
+        description: "Customers whose first net order was on this date and who were acquired through this channel. Used as the denominator for CAC."

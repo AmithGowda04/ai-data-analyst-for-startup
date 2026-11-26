@@ -1,0 +1,21 @@
+version: 2
+
+models:
+  - name: dim_products
+    description: "One row per product (grain - product)."
+    columns:
+      - name: product_id
+        description: "Unique id of the product."
+        data_tests: [unique, not_null]
+      - name: product_name
+        description: "Product name."
+      - name: brand
+        description: "Brand of the product."
+      - name: category
+        description: "Product category."
+      - name: department
+        description: "Department (for example Men or Women)."
+      - name: cost
+        description: "Cost to the business in USD."
+      - name: retail_price
+        description: "List price in USD."

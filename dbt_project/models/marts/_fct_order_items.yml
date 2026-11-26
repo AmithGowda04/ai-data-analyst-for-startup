@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: fct_order_items
+    description: "One row per item sold (grain - order item). The source of truth for revenue. Net revenue excludes items with status Cancelled or Returned; gross revenue counts every item."
+    columns:
+      - name: order_item_id
+        description: "Unique id of the order item."
+        data_tests: [unique, not_null]
+      - name: order_id
+        description: "The order this item belongs to. Joins to fct_orders.order_id."
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id
+      - name: user_id
+        description: "The customer. Joins to dim_users.user_id."
+        data_tests:
+          - relationships:
+              to: ref('dim_users')
+              field: user_id
+      - name: product_id
+        description: "The product sold. Joins to dim_products.product_id."
+        data_tests:
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: ordered_at
+        description: "UTC timestamp when the parent order was placed. Items take their order's timestamp so revenue lines up with order counts."
+      - name: ordered_date
+        description: "UTC calendar date the parent order was placed. Use this for daily, weekly or monthly revenue reporting."
+      - name: item_status
+        description: "Fulfilment status of the item."
+        data_tests:
+          - accepted_values:
+              values: ['Shipped', 'Complete', 'Processing', 'Cancelled', 'Returned']
+      - name: is_net_sale
+        description: "True when the item counts as a sale, meaning status is not Cancelled and not Returned."
+      - name: acquisition_channel
+        description: "Marketing channel through which the customer was acquired (Search, Organic, Facebook, Email, Display)."
+      - name: gross_revenue
+        description: "Item sale price in USD, counting every status including Cancelled and Returned."
+        data_tests: [non_negative]
+      - name: net_revenue
+        description: "Item sale price in USD for net sales only, and 0 for Cancelled and Returned items. This is the default meaning of revenue."
+        data_tests: [non_negative]
+      - name: product_cost
+        description: "Cost of the product in USD."
+      - name: gross_profit
+        description: "Net revenue minus product cost for net sales, and 0 for Cancelled and Returned items."

@@ -1,0 +1,41 @@
+version: 2
+
+models:
+  - name: fct_orders
+    description: "One row per order (grain - order). Orders count as real orders only when is_net_order is true, meaning at least one item is not Cancelled and not Returned."
+    columns:
+      - name: order_id
+        description: "Unique id of the order."
+        data_tests: [unique, not_null]
+      - name: user_id
+        description: "The customer. Joins to dim_users.user_id."
+        data_tests:
+          - relationships:
+              to: ref('dim_users')
+              field: user_id
+      - name: ordered_at
+        description: "UTC timestamp when the order was placed."
+      - name: ordered_date
+        description: "UTC calendar date of ordered_at. Use this for daily, weekly or monthly reporting."
+      - name: order_status
+        description: "Order-level status as reported by the source system."
+        data_tests:
+          - accepted_values:
+              values: ['Shipped', 'Complete', 'Processing', 'Cancelled', 'Returned']
+      - name: acquisition_channel
+        description: "Marketing channel through which the customer was acquired (Search, Organic, Facebook, Email, Display)."
+        data_tests:
+          - accepted_values:
+              values: ['Search', 'Organic', 'Facebook', 'Email', 'Display']
+      - name: item_count
+        description: "Number of items in the order, counting every status."
+      - name: gross_revenue
+        description: "Sum of item sale prices in USD including Cancelled and Returned items."
+        data_tests: [non_negative]
+      - name: net_revenue
+        description: "Sum of item sale prices in USD excluding Cancelled and Returned items."
+        data_tests: [non_negative]
+      - name: gross_profit
+        description: "Net revenue minus product cost for net items, in USD."
+      - name: is_net_order
+        description: "True when the order has at least one net item. Count orders with this flag set; this is the default meaning of orders."

@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: dim_users
+    description: "One row per user (grain - user). Contains no personal identifiers (no names, emails or addresses). First-order fields are computed over the loaded history, which starts on 2024-01-01."
+    columns:
+      - name: user_id
+        description: "Unique id of the user."
+        data_tests: [unique, not_null]
+      - name: age
+        description: "Age in years."
+      - name: gender
+        description: "Gender as recorded (F or M)."
+      - name: country
+        description: "Country of the user."
+      - name: state
+        description: "State or region of the user."
+      - name: city
+        description: "City of the user."
+      - name: acquisition_channel
+        description: "Marketing channel through which the user was acquired (Search, Organic, Facebook, Email, Display)."
+        data_tests:
+          - accepted_values:
+              values: ['Search', 'Organic', 'Facebook', 'Email', 'Display']
+      - name: signed_up_at
+        description: "UTC timestamp when the user signed up."
+      - name: first_net_order_at
+        description: "UTC timestamp of the user's first net order, or null if the user has no net order."
+      - name: first_net_order_date
+        description: "UTC date of the user's first net order. A user counts as a new customer on this date."
+      - name: is_customer
+        description: "True when the user has placed at least one net order."
+      - name: net_order_count
+        description: "Number of net orders the user has placed."
+      - name: lifetime_net_revenue
+        description: "Total net revenue in USD from this user."
+        data_tests: [non_negative]
+      - name: repeat_within_30d
+        description: "True when the user placed another net order within 30 days after their first net order. Used for retention."

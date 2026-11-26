@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: fct_sessions
+    description: "One row per web session (grain - session). Used for conversion rate. A session converts when it contains a purchase event."
+    columns:
+      - name: session_id
+        description: "Unique id of the session."
+        data_tests: [unique, not_null]
+      - name: user_id
+        description: "The user, when known. Null for anonymous sessions."
+      - name: session_start_at
+        description: "UTC timestamp of the first event in the session."
+      - name: session_date
+        description: "UTC date the session started. Use this for daily, weekly or monthly reporting."
+      - name: traffic_source
+        description: "Traffic source of the session (Search, Organic, Facebook, Email, Display)."
+      - name: event_count
+        description: "Number of events in the session."
+      - name: viewed_product
+        description: "True when the session includes a product page view."
+      - name: added_to_cart
+        description: "True when the session includes an add-to-cart event."
+      - name: purchased
+        description: "True when the session includes a purchase event. Conversion rate is the share of sessions where this is true."
