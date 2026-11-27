@@ -1,0 +1,13 @@
+id,difficulty,question,expected,golden_sql
+S01,hard,"What was net revenue last month?",answer,"SELECT SUM(net_revenue) AS revenue FROM metrics_daily WHERE metric_date BETWEEN '2026-10-01' AND '2026-10-31'"
+S02,hard,"Compare average order value for Search and Facebook customers in 2025.",answer,"SELECT channel, SAFE_DIVIDE(SUM(net_revenue), SUM(net_orders)) AS aov FROM metrics_daily WHERE channel IN ('Search', 'Facebook') AND metric_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY channel"
+S03,hard,"What was the CAC for Organic in 2025?",refuse,
+S04,hard,"How many web sessions converted in Q1 2025?",answer,"SELECT SUM(converted_sessions) AS converted FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-03-31'"
+S05,hard,"In which month of 2025 was ROAS lowest across all paid channels, and what was it?",answer,"SELECT DATE_TRUNC(metric_date, MONTH) AS month, SAFE_DIVIDE(SUM(net_revenue), SUM(ad_spend)) AS roas FROM metrics_daily WHERE channel != 'Organic' AND metric_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY month ORDER BY roas ASC LIMIT 1"
+S06,hard,"How many order items ordered in 2025 were cancelled?",answer,"SELECT COUNTIF(item_status = 'Cancelled') AS cancelled FROM fct_order_items WHERE ordered_date BETWEEN '2025-01-01' AND '2025-12-31'"
+S07,hard,"What was 2025 revenue by channel before removing cancelled and returned items?",answer,"SELECT channel, SUM(gross_revenue) AS gross_revenue FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY channel"
+S08,hard,"What is the average age of customers who have placed at least one net order?",answer,"SELECT AVG(age) AS avg_age FROM dim_users WHERE is_customer"
+S09,hard,"How many new customers did we get in each quarter of 2025?",answer,"SELECT DATE_TRUNC(metric_date, QUARTER) AS quarter, SUM(new_customers) AS new_customers FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31' GROUP BY quarter"
+S10,hard,"What was net revenue per web session in 2025?",answer,"SELECT SAFE_DIVIDE(SUM(net_revenue), SUM(sessions)) AS revenue_per_session FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
+S11,hard,"What was gross profit in November 2026 so far?",answer,"SELECT SUM(gross_profit) AS gross_profit FROM metrics_daily WHERE metric_date BETWEEN '2026-11-01' AND '2026-11-26'"
+S12,hard,"Which customers should we target for a win-back campaign?",refuse,
