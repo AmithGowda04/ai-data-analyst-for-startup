@@ -1,0 +1,11 @@
+id,difficulty,question,expected,golden_sql
+E01,easy,"What was total net revenue in 2024?",answer,"SELECT SUM(net_revenue) AS revenue FROM metrics_daily WHERE metric_date BETWEEN '2024-01-01' AND '2024-12-31'"
+E02,easy,"How many net orders were placed in June 2025?",answer,"SELECT SUM(net_orders) AS orders FROM metrics_daily WHERE metric_date BETWEEN '2025-06-01' AND '2025-06-30'"
+E03,easy,"What was total ad spend in 2025?",answer,"SELECT SUM(ad_spend) AS ad_spend FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
+E04,easy,"How many new customers did we acquire in 2025?",answer,"SELECT SUM(new_customers) AS new_customers FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
+E05,easy,"How many products are in the catalog?",answer,"SELECT COUNT(*) AS products FROM dim_products"
+E06,easy,"How many web sessions were there in 2025?",answer,"SELECT COUNT(*) AS sessions FROM fct_sessions WHERE session_date BETWEEN '2025-01-01' AND '2025-12-31'"
+E07,easy,"What was gross revenue in 2025, including cancelled and returned items?",answer,"SELECT SUM(gross_revenue) AS gross_revenue FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
+E08,easy,"How much did we spend on Facebook ads in 2025?",answer,"SELECT SUM(ad_spend) AS ad_spend FROM metrics_daily WHERE channel = 'Facebook' AND metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
+E09,easy,"How many customers have placed at least one net order?",answer,"SELECT COUNT(*) AS customers FROM dim_users WHERE is_customer"
+E10,easy,"What was the average order value in 2025?",answer,"SELECT SAFE_DIVIDE(SUM(net_revenue), SUM(net_orders)) AS aov FROM metrics_daily WHERE metric_date BETWEEN '2025-01-01' AND '2025-12-31'"
