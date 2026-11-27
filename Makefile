@@ -5,3 +5,5 @@ adspend:
 	python data_gen/generate_ad_spend.py --out ad_spend.csv
 test:
 	pytest -q
+ingest:
+	python ingest/run_all.py

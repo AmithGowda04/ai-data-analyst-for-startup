@@ -14,7 +14,10 @@ models:
       - name: session_date
         description: "UTC date the session started. Use this for daily, weekly or monthly reporting."
       - name: traffic_source
-        description: "Traffic source of the session (Search, Organic, Facebook, Email, Display)."
+        description: "Traffic source of the session, mapped to the five marketing channels (Adwords is Search, YouTube is Display; Email, Facebook and Organic are unchanged)."
+        data_tests:
+          - accepted_values:
+              values: ['Search', 'Organic', 'Facebook', 'Email', 'Display']
       - name: event_count
         description: "Number of events in the session."
       - name: viewed_product

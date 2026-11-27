@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: metrics_daily
+    description: "The governed metrics table (grain - one row per day and acquisition channel, including Organic). Holds additive components only. Compute every ratio as a ratio of sums using SAFE_DIVIDE, for example SAFE_DIVIDE(SUM(net_revenue), SUM(net_orders)), never as an average of per-row ratios. Ad spend is synthetic."
+    config:
+      meta:
+        metrics:
+          revenue: "SUM(net_revenue). Net of Cancelled and Returned items. Use gross_revenue only when gross is asked for."
+          orders: "SUM(net_orders). Orders with at least one item that is not Cancelled or Returned."
+          aov: "SAFE_DIVIDE(SUM(net_revenue), SUM(net_orders)). Average order value."
+          ad_spend: "SUM(ad_spend). Paid channels only; Organic has no ad spend (null)."
+          roas: "SAFE_DIVIDE(SUM(net_revenue), SUM(ad_spend)), with WHERE channel != 'Organic' so revenue and spend cover the same channels."
+          cac: "SAFE_DIVIDE(SUM(ad_spend), SUM(new_customers)), with WHERE channel != 'Organic'. A new customer is a user placing their first net order."
+          conversion_rate: "SAFE_DIVIDE(SUM(converted_sessions), SUM(sessions)). Share of web sessions that contain a purchase. Sessions are attributed to the session's traffic source, while orders and revenue are attributed to the customer's acquisition channel."
+          retention: "SAFE_DIVIDE(SUM(repeat_customers_30d), SUM(new_customers)), only where retention_eligible is true. Share of new customers who order again within 30 days."
+    columns:
+      - name: metric_key
+        description: "Unique key combining date and channel."
+        data_tests: [unique, not_null]
+      - name: metric_date
+        description: "UTC date. Orders and revenue use the order date, sessions use the session start date, new customers use the date of the first net order."
+      - name: channel
+        description: "Acquisition channel or traffic source (Search, Organic, Facebook, Email, Display)."
+        data_tests:
+          - accepted_values:
+              values: ['Search', 'Organic', 'Facebook', 'Email', 'Display']
+      - name: net_orders
+        description: "Number of net orders placed that day. This is the default meaning of orders."
+      - name: gross_revenue
+        description: "Revenue in USD counting every item status including Cancelled and Returned."
+      - name: net_revenue
+        description: "Revenue in USD excluding Cancelled and Returned items. This is the default meaning of revenue."
+        data_tests: [non_negative]
+      - name: gross_profit
+        description: "Net revenue minus product cost in USD."
+      - name: ad_spend
+        description: "Ad spend in USD. Null for Organic, which has no paid spend."
+        data_tests: [non_negative]
+      - name: clicks
+        description: "Ad clicks. Null for Organic."
+      - name: new_customers
+        description: "Users whose first net order was on this date. Denominator for CAC and retention."
+      - name: repeat_customers_30d
+        description: "New customers of this date who placed another net order within 30 days. Numerator for retention."
+      - name: sessions
+        description: "Web sessions that started on this date. Denominator for conversion rate."
+      - name: converted_sessions
+        description: "Web sessions that started on this date and contain a purchase."
+      - name: retention_eligible
+        description: "True when the date is at least 30 days before the latest data date, so the 30-day retention window is complete. Filter on this when computing retention."
